@@ -3,23 +3,105 @@ import random
 import requests
 from configuration import Configuration as conf
 
+
 class TestDivisionFunctions:
 
-    def test_division_of_numbers(self):
-        left = random.randint(-2147483648, 2147483647)
-        right = random.randint(-2147483648, left - 1)
+    def test_division_the_larger_by_the_smaller(self):
+        left = conf.integers()
+        right = conf.minority_integers(left)
         expected_result = left // right
         dataset = requests.post(conf.url_division, data=json.dumps({"x": left, "y": right}))
         actual_result = dataset.json()['result']
         if actual_result == expected_result:
-            print()
-            print(f"Left number: {left} | Right number: {right}")
-            print(f"Expected result: {expected_result}")
-            print(f"Actual result: {actual_result}")
-            print(dataset.text)
+            conf.response_function(left, right, expected_result, actual_result, dataset.text)
         else:
-            print("ERROR: Test is fail")
-            print("Actual result is not equal to expected")
-            print(f"Left number: {left} | Right number: {right}")
-            print(f"Expected result: {expected_result}")
-            print(f"Actual result: {actual_result}")
+            conf.error_response_function(left, right, expected_result, actual_result, dataset.text)
+
+    def test_division_the_smaller_by_the_larger(self):
+        left = conf.integers()
+        right = conf.more_integers(left)
+        expected_result = left // right
+        dataset = requests.post(conf.url_division, data=json.dumps({"x": left, "y": right}))
+        actual_result = dataset.json()['result']
+        if actual_result == expected_result:
+            conf.response_function(left, right, expected_result, actual_result, dataset.text)
+        else:
+            conf.error_response_function(left, right, expected_result, actual_result, dataset.text)
+
+    def test_choice_division_status_zero(self):
+        left = conf.integers()
+        right = conf.minority_integers(left)
+        dataset = requests.post(conf.url_division, data=json.dumps({"x": left, "y": right}))
+        actual_result = dataset.json()['statusCode']
+        if actual_result == conf.zero:
+            conf.response_status(conf.zero, actual_result, dataset.text)
+        else:
+            conf.error_response_status(conf.zero, actual_result, dataset.text)
+
+    def test_left_division_status_two(self):
+        left = conf.integers()
+        dataset = requests.post(conf.url_division, data=json.dumps({"x": left}))
+        actual_result = dataset.json()['statusCode']
+        if actual_result == conf.two:
+            conf.response_status(conf.two, actual_result, dataset.text)
+        else:
+            conf.error_response_status(conf.two, actual_result, dataset.text)
+
+    def test_right_division_status_two(self):
+        right = conf.integers()
+        dataset = requests.post(conf.url_division, data=json.dumps({"y": right}))
+        actual_result = dataset.json()['statusCode']
+        if actual_result == conf.two:
+            conf.response_status(conf.two, actual_result, dataset.text)
+        else:
+            conf.error_response_status(conf.two, actual_result, dataset.text)
+
+    def test_left_division_status_three(self):
+        left = conf.floating()
+        right = conf.integers()
+        dataset = requests.post(conf.url_division, data=json.dumps({"x": left, "y": right}))
+        actual_result = dataset.json()['statusCode']
+        if actual_result == conf.three:
+            conf.response_status(conf.three, actual_result, dataset.text)
+        else:
+            conf.error_response_status(conf.three, actual_result, dataset.text)
+
+    def test_right_division_status_three(self):
+        left = conf.integers()
+        right = conf.floating()
+        dataset = requests.post(conf.url_division, data=json.dumps({"x": left, "y": right}))
+        actual_result = dataset.json()['statusCode']
+        if actual_result == conf.three:
+            conf.response_status(conf.three, actual_result, dataset.text)
+        else:
+            conf.error_response_status(conf.three, actual_result, dataset.text)
+
+    def test_left_division_status_four(self):
+        left = conf.max_integers()
+        right = conf.integers()
+        dataset = requests.post(conf.url_division, data=json.dumps({"x": left, "y": right}))
+        actual_result = dataset.json()['statusCode']
+        if actual_result == conf.four:
+            conf.response_status(conf.four, actual_result, dataset.text)
+        else:
+            conf.error_response_status(conf.four, actual_result, dataset.text)
+
+    def test_right_division_status_four(self):
+        left = conf.integers()
+        right = conf.max_integers()
+        dataset = requests.post(conf.url_division, data=json.dumps({"x": left, "y": right}))
+        actual_result = dataset.json()['statusCode']
+        if actual_result == conf.four:
+            conf.response_status(conf.four, actual_result, dataset.text)
+        else:
+            conf.error_response_status(conf.four, actual_result, dataset.text)
+
+    def test_division_status_five(self):
+        left = conf.integers()
+        right = conf.minority_integers(left)
+        dataset = requests.get(conf.url_division, data=json.dumps({"x": left, "y": right}))
+        actual_result = dataset.json()['statusCode']
+        if actual_result == conf.five:
+            conf.response_status(conf.five, actual_result, dataset.text)
+        else:
+            conf.error_response_status(conf.five, actual_result, dataset.text)
