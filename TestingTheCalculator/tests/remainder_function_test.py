@@ -3,14 +3,13 @@ import random
 import requests
 from configuration import Configuration as conf
 
+class TestRemainderFunctions:
 
-class TestAdditionFunctions:
-
-    def test_addition_of_numbers(self):
+    def test_remainder_of_numbers(self):
         left = random.randint(-2147483648, 2147483647)
         right = random.randint(-2147483648, 2147483647)
-        expected_result = left + right
-        dataset = requests.post(conf.url_addition, data=json.dumps({"x": left, "y": right}))
+        expected_result = left * right
+        dataset = requests.post(conf.url_remainder, data=json.dumps({"x": left, "y": right}))
         actual_result = dataset.json()['result']
         if actual_result == expected_result:
             print()
